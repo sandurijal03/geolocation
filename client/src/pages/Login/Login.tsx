@@ -11,11 +11,17 @@ const Logo: React.FC<LogoProps> = ({ title }) => {
 }
 
 const Login = () => {
+  const [username, setUsername] = React.useState<string>('')
   return (
     <Wrapper>
       <Box>
         <Logo title={'GeoCall'} />
-        <Input />
+        <Input
+          type='text'
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+          placeholder='Username'
+        />
         <Button>Login</Button>
       </Box>
     </Wrapper>

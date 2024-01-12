@@ -27,6 +27,27 @@ const Login = () => {
     navigate('/map')
   }
 
+  const onSuccess = (position: GeolocationPosition) => {
+    console.log(position)
+  }
+
+  const onError = (error: any) => {
+    console.error('Error occured when trying to fetch location', error)
+  }
+
+  const locationOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+  }
+
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      onSuccess,
+      onError,
+      locationOptions,
+    )
+  }, [])
+
   return (
     <Wrapper>
       <Box>

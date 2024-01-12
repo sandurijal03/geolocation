@@ -26,6 +26,12 @@ const Input = styled.input`
   border-radius: 8px;
   border: none;
   outline: none;
+  padding-left: 10px;
+
+  :placeholder {
+    padding-left: 10px;
+    color: gray;
+  }
 `
 
 const Button = styled.button`
@@ -33,6 +39,7 @@ const Button = styled.button`
   height: 50px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  cursor: pointer;
 `
 
 const Title = styled.div`

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Wrapper, Box, Input, Button, Title } from './login.style'
 
@@ -12,6 +13,20 @@ const Logo: React.FC<LogoProps> = ({ title }) => {
 
 const Login = () => {
   const [username, setUsername] = React.useState<string>('')
+
+  const navigate = useNavigate()
+
+  const isUsernameValid = (username: string) => {
+    return (
+      username.length > 0 && username.length < 10 && !username.includes(' ')
+    )
+  }
+
+  const handleLogin = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    e.preventDefault()
+    navigate('/map')
+  }
+
   return (
     <Wrapper>
       <Box>
@@ -22,7 +37,9 @@ const Login = () => {
           value={username}
           placeholder='Username'
         />
-        <Button>Login</Button>
+        <Button onClick={handleLogin} disabled={!isUsernameValid(username)}>
+          Login
+        </Button>
       </Box>
     </Wrapper>
   )

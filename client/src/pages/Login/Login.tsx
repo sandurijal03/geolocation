@@ -22,7 +22,7 @@ const Login = () => {
     )
   }
 
-  const handleLogin = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     navigate('/map')
   }

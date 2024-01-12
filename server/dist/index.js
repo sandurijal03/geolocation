@@ -23,10 +23,16 @@ const mountServer = () => {
     });
     io.on('connection', (socket) => {
         console.log('user connected of the id: ' + socket.id);
+        socket.on('disconnect', () => {
+            disconnectEventHandler(socket.id);
+        });
     });
     const port = process.env.PORT || 5000;
     server.listen(port, () => {
         console.log(`server running on port: ${port}`);
     });
+};
+const disconnectEventHandler = (id) => {
+    console.log(`user disconnected of the id : ${id}`);
 };
 mountServer();

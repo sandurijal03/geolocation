@@ -7,6 +7,7 @@ const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const socket_io_1 = require("socket.io");
+let onlineUsers = {};
 const mountServer = () => {
     const app = (0, express_1.default)();
     const server = http_1.default.createServer(app);
@@ -23,6 +24,7 @@ const mountServer = () => {
     });
     io.on('connection', (socket) => {
         console.log('user connected of the id: ' + socket.id);
+        socket.on('user-login', (data) => loginEventHandler(socket, data));
         socket.on('disconnect', () => {
             disconnectEventHandler(socket.id);
         });
@@ -34,5 +36,19 @@ const mountServer = () => {
 };
 const disconnectEventHandler = (id) => {
     console.log(`user disconnected of the id : ${id}`);
+    removeOnlineUser(id);
+};
+const loginEventHandler = (socket, data) => {
+    onlineUsers[socket.id] = {
+        username: data.username,
+        coords: data.coords,
+    };
+    console.log('users', onlineUsers);
+};
+const removeOnlineUser = (socketId) => {
+    if (onlineUsers[socketId]) {
+        delete onlineUsers[socketId];
+    }
+    console.log('onlineUsers', onlineUsers);
 };
 mountServer();

@@ -2,7 +2,19 @@ import http from 'http'
 
 import express, { Request, Response } from 'express'
 import cors from 'cors'
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
+
+type OnlineUsers = {
+  [id: string]: {
+    username: string
+    coords: {
+      lat: number
+      lng: number
+    }
+  }
+}
+
+let onlineUsers: OnlineUsers = {}
 
 const mountServer = () => {
   const app = express()
@@ -24,6 +36,8 @@ const mountServer = () => {
   io.on('connection', (socket: any) => {
     console.log('user connected of the id: ' + socket.id)
 
+    socket.on('user-login', (data: UserData) => loginEventHandler(socket, data))
+
     socket.on('disconnect', () => {
       disconnectEventHandler(socket.id)
     })
@@ -37,6 +51,30 @@ const mountServer = () => {
 
 const disconnectEventHandler = (id: string) => {
   console.log(`user disconnected of the id : ${id}`)
+  removeOnlineUser(id)
+}
+
+type UserData = {
+  username: string
+  coords: {
+    lat: number
+    lng: number
+  }
+}
+
+const loginEventHandler = (socket: Socket, data: UserData) => {
+  onlineUsers[socket.id] = {
+    username: data.username,
+    coords: data.coords,
+  }
+  console.log('users', onlineUsers);
+}
+
+const removeOnlineUser = (socketId: string) => {
+  if (onlineUsers[socketId]) {
+    delete onlineUsers[socketId]
+  }
+  console.log('onlineUsers', onlineUsers);
 }
 
 mountServer()

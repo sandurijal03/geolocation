@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { setMyLocation } from '../../store/MapPage/mapSlice'
+import { getFakeLocation } from './fake_location'
 
 import { Wrapper, Box, Input, Button, Title } from './login.style'
 
@@ -32,7 +33,7 @@ const Login = () => {
     navigate('/map')
   }
 
-  const onSuccess = (position: GeolocationPosition) => {
+  const onSuccess = (position: any) => {
     console.log(position)
     dispatch(
       setMyLocation({
@@ -53,11 +54,12 @@ const Login = () => {
   }
 
   React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      onSuccess,
-      onError,
-      locationOptions,
-    )
+    // navigator.geolocation.getCurrentPosition(
+    //   onSuccess,
+    //   onError,
+    //   locationOptions,
+    // )
+    onSuccess(getFakeLocation())
   }, [])
 
   return (

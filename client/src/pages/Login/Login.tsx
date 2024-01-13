@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { connectWithSocketIOServer } from '../../socketConnection/socketConn'
+import { proceedWithLogin } from '../../store/actions/loginActions'
 import { setMyLocation } from '../../store/MapPage/mapSlice'
 import { getFakeLocation } from './fake_location'
 
@@ -33,6 +34,13 @@ const Login = () => {
 
   const handleLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
+    proceedWithLogin({
+      username,
+      coords: {
+        lat: myLocation.lat,
+        lng: myLocation.lng,
+      }
+    })
     navigate('/map')
   }
 

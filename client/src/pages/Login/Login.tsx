@@ -13,6 +13,7 @@ const Logo: React.FC<LogoProps> = ({ title }) => {
 
 const Login = () => {
   const [username, setUsername] = React.useState<string>('')
+  const [locationErrorOccurred, setLocationErrorOccurred] = React.useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -33,6 +34,7 @@ const Login = () => {
 
   const onError = (error: any) => {
     console.error('Error occured when trying to fetch location', error)
+    setLocationErrorOccurred(true)
   }
 
   const locationOptions = {
@@ -58,7 +60,7 @@ const Login = () => {
           value={username}
           placeholder='Username'
         />
-        <Button onClick={handleLogin} disabled={!isUsernameValid(username)}>
+        <Button onClick={handleLogin} disabled={!isUsernameValid(username) || locationErrorOccurred}>
           Login
         </Button>
       </Box>

@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { setMyLocation } from '../../store/MapPage/mapSlice'
 
 import { Wrapper, Box, Input, Button, Title } from './login.style'
 
@@ -13,9 +15,11 @@ const Logo: React.FC<LogoProps> = ({ title }) => {
 
 const Login = () => {
   const [username, setUsername] = React.useState<string>('')
-  const [locationErrorOccurred, setLocationErrorOccurred] = React.useState<boolean>(false)
+  const [locationErrorOccurred, setLocationErrorOccurred] =
+    React.useState<boolean>(false)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const isUsernameValid = (username: string) => {
     return (
@@ -30,6 +34,12 @@ const Login = () => {
 
   const onSuccess = (position: GeolocationPosition) => {
     console.log(position)
+    dispatch(
+      setMyLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      }),
+    )
   }
 
   const onError = (error: any) => {
@@ -60,7 +70,10 @@ const Login = () => {
           value={username}
           placeholder='Username'
         />
-        <Button onClick={handleLogin} disabled={!isUsernameValid(username) || locationErrorOccurred}>
+        <Button
+          onClick={handleLogin}
+          disabled={!isUsernameValid(username) || locationErrorOccurred}
+        >
           Login
         </Button>
       </Box>

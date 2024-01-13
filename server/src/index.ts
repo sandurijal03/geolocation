@@ -16,6 +16,8 @@ type OnlineUsers = {
 
 let onlineUsers: OnlineUsers = {}
 
+var io: any
+
 const mountServer = () => {
   const app = express()
   const server = http.createServer(app)
@@ -25,7 +27,7 @@ const mountServer = () => {
   app.get('/', (req: Request, res: Response) => {
     res.send('hello world')
   })
-  const io = new Server(server, {
+  io = new Server(server, {
     allowEIO3: true,
     cors: {
       origin: '*',
@@ -63,18 +65,45 @@ type UserData = {
 }
 
 const loginEventHandler = (socket: Socket, data: UserData) => {
+  socket.join('logged-users')
+
   onlineUsers[socket.id] = {
     username: data.username,
     coords: data.coords,
   }
-  console.log('users', onlineUsers);
+  console.log('users', onlineUsers)
+
+  io.to('logged-users').emit('online-users', convertOnlineUsersToArray())
+}
+
+type OnlineUsersCol = {
+  socketId: string
+  username: string
+  coords: {
+    lat: number
+    lng: number
+  }
+}
+
+const convertOnlineUsersToArray = () => {
+  const onlineUsersArray: OnlineUsersCol[] = []
+
+  Object.entries(onlineUsers).forEach(([key, value]) => {
+    onlineUsersArray.push({
+      socketId: key,
+      username: value.username,
+      coords: value.coords,
+    })
+  })
+
+  return onlineUsersArray
 }
 
 const removeOnlineUser = (socketId: string) => {
   if (onlineUsers[socketId]) {
     delete onlineUsers[socketId]
   }
-  console.log('onlineUsers', onlineUsers);
+  console.log('onlineUsers', onlineUsers)
 }
 
 mountServer()

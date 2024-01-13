@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const socket_io_1 = require("socket.io");
 let onlineUsers = {};
+var io;
 const mountServer = () => {
     const app = (0, express_1.default)();
     const server = http_1.default.createServer(app);
@@ -15,7 +16,7 @@ const mountServer = () => {
     app.get('/', (req, res) => {
         res.send('hello world');
     });
-    const io = new socket_io_1.Server(server, {
+    io = new socket_io_1.Server(server, {
         allowEIO3: true,
         cors: {
             origin: '*',
@@ -39,11 +40,24 @@ const disconnectEventHandler = (id) => {
     removeOnlineUser(id);
 };
 const loginEventHandler = (socket, data) => {
+    socket.join('logged-users');
     onlineUsers[socket.id] = {
         username: data.username,
         coords: data.coords,
     };
     console.log('users', onlineUsers);
+    io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
+};
+const convertOnlineUsersToArray = () => {
+    const onlineUsersArray = [];
+    Object.entries(onlineUsers).forEach(([key, value]) => {
+        onlineUsersArray.push({
+            socketId: key,
+            username: value.username,
+            coords: value.coords,
+        });
+    });
+    return onlineUsersArray;
 };
 const removeOnlineUser = (socketId) => {
     if (onlineUsers[socketId]) {

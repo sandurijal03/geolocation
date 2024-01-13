@@ -10,8 +10,12 @@ export const connectWithSocketIOServer = () => {
   socket.on('connect', () => {
     console.log('connected to server')
   })
+
+  socket.on('online-users', (usersData: any) => {
+    console.log(usersData)
+  })
 }
 
-export const login = (data:LoginParameters) => {
-  socket.emit("user-login", data)
+export const login = (data: LoginParameters) => {
+  socket.emit('user-login', data)
 }

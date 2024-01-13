@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { connectWithSocketIOServer } from '../../socketConnection/socketConn'
 import { setMyLocation } from '../../store/MapPage/mapSlice'
 import { getFakeLocation } from './fake_location'
 
@@ -18,6 +19,8 @@ const Login = () => {
   const [username, setUsername] = React.useState<string>('')
   const [locationErrorOccurred, setLocationErrorOccurred] =
     React.useState<boolean>(false)
+
+  const myLocation = useSelector((state: any) => state.map.myLocation)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -61,6 +64,12 @@ const Login = () => {
     // )
     onSuccess(getFakeLocation())
   }, [])
+
+  React.useEffect(() => {
+    if (myLocation) {
+      connectWithSocketIOServer()
+    }
+  }, [myLocation])
 
   return (
     <Wrapper>

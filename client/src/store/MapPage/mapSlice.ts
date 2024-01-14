@@ -24,12 +24,15 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    setMyLocation: (state: InitialState, action: any):any => {
+    setMyLocation: (state: InitialState, action: any): any => {
       state.myLocation = action.payload
+    },
+    setOnlineUsers: (state: InitialState, action: any) => {
+      state.onlineUsers = action.payload
     },
   },
 })
 
-export const { setMyLocation } = mapSlice.actions
+export const { setMyLocation, setOnlineUsers } = mapSlice.actions
 
 export default mapSlice.reducer

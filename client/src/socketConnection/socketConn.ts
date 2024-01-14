@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
 
 import { LoginParameters } from '../store/actions/loginActions'
+import { onlineUsersHandler } from '../store/actions/userActions'
 
 let socket: any = null
 
@@ -13,6 +14,7 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('online-users', (usersData: any) => {
     console.log(usersData)
+    onlineUsersHandler(socket.id, usersData)
   })
 }
 

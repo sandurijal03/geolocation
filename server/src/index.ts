@@ -51,9 +51,16 @@ const mountServer = () => {
   })
 }
 
+const broadcastDisconnectedUserDetails = (
+  disconnectedUsersSocketId: string,
+) => {
+  io.to('logged-users').emit('user-disconnected', disconnectedUsersSocketId)
+}
+
 const disconnectEventHandler = (id: string) => {
   console.log(`user disconnected of the id : ${id}`)
   removeOnlineUser(id)
+  broadcastDisconnectedUserDetails(id)
 }
 
 type UserData = {

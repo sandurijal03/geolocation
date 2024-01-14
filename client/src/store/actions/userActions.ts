@@ -1,4 +1,4 @@
-import { setOnlineUsers } from '../MapPage/mapSlice'
+import { setOnlineUsers , removeDisconnectedUser} from '../MapPage/mapSlice'
 import store from '../store'
 
 export const onlineUsersHandler = (socketId: string, usersData: any) => {
@@ -12,4 +12,10 @@ export const onlineUsersHandler = (socketId: string, usersData: any) => {
       }),
     ),
   )
+}
+
+export const userDisconnectedHandler = (disconnectedSocketId:string) => {
+ store.dispatch(
+    removeDisconnectedUser(disconnectedSocketId)
+  ) 
 }

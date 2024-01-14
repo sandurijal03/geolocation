@@ -35,9 +35,13 @@ const mountServer = () => {
         console.log(`server running on port: ${port}`);
     });
 };
+const broadcastDisconnectedUserDetails = (disconnectedUsersSocketId) => {
+    io.to('logged-users').emit('user-disconnected', disconnectedUsersSocketId);
+};
 const disconnectEventHandler = (id) => {
     console.log(`user disconnected of the id : ${id}`);
     removeOnlineUser(id);
+    broadcastDisconnectedUserDetails(id);
 };
 const loginEventHandler = (socket, data) => {
     socket.join('logged-users');

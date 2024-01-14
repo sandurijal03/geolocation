@@ -30,9 +30,14 @@ export const mapSlice = createSlice({
     setOnlineUsers: (state: InitialState, action: any) => {
       state.onlineUsers = action.payload
     },
+    removeDisconnectedUser: (state: InitialState, action: any) => {
+      state.onlineUsers = state.onlineUsers.filter(
+        (user: any) => user.socketId !== action.payload,
+      )
+    },
   },
 })
 
-export const { setMyLocation, setOnlineUsers } = mapSlice.actions
+export const { setMyLocation, setOnlineUsers, removeDisconnectedUser } = mapSlice.actions
 
 export default mapSlice.reducer

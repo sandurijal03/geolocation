@@ -5,9 +5,9 @@ type MyLocation = {
   lng: number
 }
 
-type InitialState = {
+export type InitialState = {
   myLocation: MyLocation
-  onlineUsers: any
+  onlineUsers: OnlineUser[]
   cardChosenOption: any
 }
 
@@ -18,6 +18,13 @@ const initialState: InitialState = {
   },
   onlineUsers: [],
   cardChosenOption: null,
+}
+
+export type OnlineUser = {
+  socketId:string;
+  username:string;
+  coords:MyLocation;
+  myself?:boolean;
 }
 
 export const mapSlice = createSlice({
@@ -32,7 +39,7 @@ export const mapSlice = createSlice({
     },
     removeDisconnectedUser: (state: InitialState, action: any) => {
       state.onlineUsers = state.onlineUsers.filter(
-        (user: any) => user.socketId !== action.payload,
+        (user) => user.socketId !== action.payload,
       )
     },
   },

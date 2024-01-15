@@ -21,10 +21,10 @@ const initialState: InitialState = {
 }
 
 export type OnlineUser = {
-  socketId:string;
-  username:string;
-  coords:MyLocation;
-  myself?:boolean;
+  socketId: string
+  username: string
+  coords: MyLocation
+  myself?: boolean
 }
 
 export const mapSlice = createSlice({
@@ -42,9 +42,17 @@ export const mapSlice = createSlice({
         (user) => user.socketId !== action.payload,
       )
     },
+    setCardChoosenOptions: (state: InitialState, action: any) => {
+      state.cardChosenOption = action.payload
+    },
   },
 })
 
-export const { setMyLocation, setOnlineUsers, removeDisconnectedUser } = mapSlice.actions
+export const {
+  setMyLocation,
+  setOnlineUsers,
+  removeDisconnectedUser,
+  setCardChoosenOptions,
+} = mapSlice.actions
 
 export default mapSlice.reducer

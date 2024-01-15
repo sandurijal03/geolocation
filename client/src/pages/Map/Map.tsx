@@ -3,8 +3,12 @@ import GoogleMapReact from 'google-map-react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
+import Marker from './Marker'
+import { OnlineUser } from '../../store/MapPage/mapSlice'
+
 const Map = () => {
   const myLocation = useSelector((state: any) => state.map.myLocation)
+  const onlineUsers = useSelector((state: any) => state.map.onlineUsers)
 
   const defaultMapProps = {
     center: {
@@ -20,7 +24,21 @@ const Map = () => {
         bootstrapURLKeys={{ key: '' }}
         defaultCenter={defaultMapProps.center}
         defaultZoom={defaultMapProps.zoom}
-      ></GoogleMapReact>
+      >
+        {onlineUsers.map((onlineUser: OnlineUser) => {
+          return (
+            <Marker
+              lat={onlineUser.coords.lat}
+              lng={onlineUser.coords.lng}
+              coords={onlineUser.coords}
+              myself={onlineUser.myself}
+              socketId={onlineUser.socketId}
+              key={onlineUser.socketId}
+              username={onlineUser.username}
+            />
+          )
+        })}
+      </GoogleMapReact>
     </Wrapper>
   )
 }
@@ -44,22 +62,6 @@ const Card = styled.div`
   height: 100px;
   display: flex;
   flex-direction: column;
-
-  :hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  }
-`
-
-const Marker = styled.div`
-  width: 30px;
-  height: 30px;
-  position: relative;
-`
-const MarkerImg = styled.img`
-  width: 100%;
-  height: 100%;
-  transition: 0.3s;
-  cursor: pointer;
 
   :hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);

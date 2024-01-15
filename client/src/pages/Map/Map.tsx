@@ -77,10 +77,7 @@ const MarkerText = styled.p`
   padding: 0;
 `
 
-const CardLabel = styled.label`
-  margin: 10px 0 0 10px;
-  padding: 0;
-`
+
 
 const CardImg = styled.img`
   width: 45px;

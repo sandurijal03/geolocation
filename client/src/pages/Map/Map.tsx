@@ -21,7 +21,7 @@ const Map = () => {
   return (
     <Wrapper>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: '' }}
+        bootstrapURLKeys={{ key: 'AIzaSyAcLD6V_5w9PE5SSQzcMR4DZreKS_NRjK8' }}
         defaultCenter={defaultMapProps.center}
         defaultZoom={defaultMapProps.zoom}
       >

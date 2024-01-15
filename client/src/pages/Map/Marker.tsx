@@ -24,6 +24,7 @@ const Marker: React.FC<MarkerProps> = ({
   return (
     <MarkerContainer>
       <MarkerImg src={LocationIcon} alt={username} />
+      <MarkerText>{myself ? 'Me' : username}</MarkerText>
     </MarkerContainer>
   )
 }
@@ -45,4 +46,13 @@ const MarkerImg = styled.img`
   :hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
+`
+
+const MarkerText = styled.p`
+  font-size: 16px;
+  color: white;
+  font-weight: 700;
+  position: absolute;
+  margin: 0;
+  padding: 0;
 `

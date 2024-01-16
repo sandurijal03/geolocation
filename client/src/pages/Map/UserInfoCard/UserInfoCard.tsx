@@ -5,7 +5,10 @@ import { calculateDistanceBetweenCoords } from '../../../utils/locationDistance'
 
 type UserInfoCardProps = {
   username: string
-  userLocation: string
+  userLocation: {
+    lat:number;
+    lng:number
+  }
   socketId: string
 }
 
@@ -28,7 +31,7 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({
     <CardWrapper>
       <Label text={username} fontSize='16px' />
       <Label
-        text={`${calculateDistanceBetweenCoords(myLocation, userLocation)}`}
+        text={`${calculateDistanceBetweenCoords(myLocation, userLocation)} km`}
         fontSize='14px'
       />
     </CardWrapper>

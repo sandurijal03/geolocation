@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { setCardChoosenOptions } from '../../store/MapPage/mapSlice'
+import { setCardChoosenOption } from '../../store/MapPage/mapSlice'
 
 import LocationIcon from './location-icon.svg'
 
@@ -27,12 +27,12 @@ const Marker: React.FC<MarkerProps> = ({
 
   const handleOptionChoose = () => {
     if (!myself) {
-      dispatch(setCardChoosenOptions({ socketId, username, coords }))
+      dispatch(setCardChoosenOption({ socketId, username, coords }))
     }
   }
 
   return (
-    <MarkerContainer>
+    <MarkerContainer onClick={handleOptionChoose}>
       <MarkerImg src={LocationIcon} alt={username} />
       <MarkerText>{myself ? 'Me' : username}</MarkerText>
     </MarkerContainer>

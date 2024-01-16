@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { calculateDistanceBetweenCoords } from '../../../utils/locationDistance'
 
 type UserInfoCardProps = {
   username: string
@@ -26,7 +27,10 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({
   return (
     <CardWrapper>
       <Label text={username} fontSize='16px' />
-      <Label text={'24km'} fontSize='14px' />
+      <Label
+        text={`${calculateDistanceBetweenCoords(myLocation, userLocation)}`}
+        fontSize='14px'
+      />
     </CardWrapper>
   )
 }

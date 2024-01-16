@@ -42,7 +42,7 @@ export const mapSlice = createSlice({
         (user) => user.socketId !== action.payload,
       )
     },
-    setCardChoosenOptions: (state: InitialState, action: any) => {
+    setCardChoosenOption: (state: InitialState, action: any) => {
       state.cardChosenOption = action.payload
     },
   },
@@ -52,7 +52,7 @@ export const {
   setMyLocation,
   setOnlineUsers,
   removeDisconnectedUser,
-  setCardChoosenOptions,
+  setCardChoosenOption,
 } = mapSlice.actions
 
 export default mapSlice.reducer

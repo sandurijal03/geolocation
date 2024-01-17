@@ -43,7 +43,7 @@ const Map = () => {
           )
         })}
       </GoogleMapReact>
-      {cardChoosenOption && (
+      {cardChoosenOption && cardChoosenOption.socketId && (
         <UserInfoCard
           socketId={cardChoosenOption.socketId}
           username={cardChoosenOption.username}

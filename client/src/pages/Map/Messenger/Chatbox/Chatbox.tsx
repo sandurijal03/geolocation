@@ -9,6 +9,20 @@ type ChatboxProps = {
 }
 
 const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
+  const [message, setMessage] = React.useState<string>('')
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.code === 'Enter' && message.length > 0) {
+      proceedChatMessage()
+      setMessage("");
+    }
+  }
+
+  const proceedChatMessage = () => {
+    console.log('sending message to the receiver')
+  }
+
+
   return (
     <ChatboxContainer>
       <ChatboxHeaderContainer>
@@ -18,8 +32,18 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
         </CloseIconContainer>
       </ChatboxHeaderContainer>
       <ChatboxMessagesContainer>
+        <MessageWrapper>
+          <MessageLeft></MessageLeft>
+          <MessageRight></MessageRight>
+        </MessageWrapper>
         <ChatboxNewMessageContainer>
-          <NewMessageInput type={'text'} />
+          <NewMessageInput
+            type={'text'}
+            placeholder='Enter Something'
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
+            onKeyDown={handleKeyDown}
+          />
         </ChatboxNewMessageContainer>
       </ChatboxMessagesContainer>
     </ChatboxContainer>
@@ -69,6 +93,9 @@ const ChatboxNewMessageContainer = styled.div`
   width: 100%;
   min-height: 40px;
   border-top: 1px solid #e5e5e5;
+  position: absolute;
+  bottom: 0;
+  width: 46%;
 `
 const NewMessageInput = styled.input`
   width: calc(100% - 10px);
@@ -87,4 +114,28 @@ const CloseIconContainer = styled.div`
 const CloseImage = styled.img`
   width: 100%;
   height: 100%;
+`
+
+const MessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+`
+
+const MessageLeft = styled.div`
+  display: inline-block;
+  padding: 10px;
+  margin: 5px 5px;
+  border-radius: 25px;
+  background: rgba(211, 211, 211, 0.9);
+  font-size: 14px;
+  max-width: 80%;
+`
+const MessageRight = styled.div`
+  display: inline-block;
+  padding: 10px;
+  margin: 5px 5px;
+  border-radius: 25px;
+  background: rgba(39, 220, 197, 0.9);
+  font-size: 14px;
+  max-width: 80%;
 `

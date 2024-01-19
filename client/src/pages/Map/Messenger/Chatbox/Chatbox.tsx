@@ -8,13 +8,51 @@ type ChatboxProps = {
   username: string
 }
 
+type SingleMessageProps = {
+  content: string
+  myMessage: boolean
+}
+
+type Message = {
+  content: string
+}
+
+const LeftMessage: React.FC<Message> = ({ content }) => {
+  return <MessageRight>{content}</MessageRight>
+}
+
+const RightMessage: React.FC<Message> = ({ content }) => {
+  return <MessageLeft>{content}</MessageLeft>
+}
+
+const SingleMessage: React.FC<SingleMessageProps> = ({
+  content,
+  myMessage,
+}) => {
+  return (
+    <MessageWrapper
+      style={
+        myMessage
+          ? { justifyContent: 'flex-end' }
+          : { justifyContent: 'flex-start' }
+      }
+    >
+      {myMessage ? (
+        <RightMessage content={content} />
+      ) : (
+        <LeftMessage content={content} />
+      )}
+    </MessageWrapper>
+  )
+}
+
 const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
   const [message, setMessage] = React.useState<string>('')
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter' && message.length > 0) {
       proceedChatMessage()
-      setMessage("");
+      setMessage('')
     }
   }
 
@@ -22,6 +60,10 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
     console.log('sending message to the receiver')
   }
 
+  const messages = [
+    { id: 1, myMessage: true, content: 'hello' },
+    { id: 2, myMessage: false, content: 'hello back' },
+  ]
 
   return (
     <ChatboxContainer>
@@ -32,20 +74,25 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
         </CloseIconContainer>
       </ChatboxHeaderContainer>
       <ChatboxMessagesContainer>
-        <MessageWrapper>
-          <MessageLeft></MessageLeft>
-          <MessageRight></MessageRight>
-        </MessageWrapper>
-        <ChatboxNewMessageContainer>
-          <NewMessageInput
-            type={'text'}
-            placeholder='Enter Something'
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-            onKeyDown={handleKeyDown}
-          />
-        </ChatboxNewMessageContainer>
+        {messages?.map((message) => {
+          return (
+            <SingleMessage
+              key={message.id}
+              content={message.content}
+              myMessage={message.myMessage}
+            />
+          )
+        })}
       </ChatboxMessagesContainer>
+      <ChatboxNewMessageContainer>
+        <NewMessageInput
+          type={'text'}
+          placeholder='Enter Something'
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+          onKeyDown={handleKeyDown}
+        />
+      </ChatboxNewMessageContainer>
     </ChatboxContainer>
   )
 }
@@ -93,9 +140,6 @@ const ChatboxNewMessageContainer = styled.div`
   width: 100%;
   min-height: 40px;
   border-top: 1px solid #e5e5e5;
-  position: absolute;
-  bottom: 0;
-  width: 46%;
 `
 const NewMessageInput = styled.input`
   width: calc(100% - 10px);
@@ -119,6 +163,7 @@ const CloseImage = styled.img`
 const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
+  /* flex-direction:column; */
 `
 
 const MessageLeft = styled.div`

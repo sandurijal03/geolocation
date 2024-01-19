@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import Marker from './Marker'
 import { OnlineUser } from '../../store/MapPage/mapSlice'
 import UserInfoCard from './UserInfoCard/UserInfoCard'
+import Messenger from './Messenger/Messenger'
 
 const Map = () => {
   const myLocation = useSelector((state: any) => state.map.myLocation)
@@ -43,6 +44,7 @@ const Map = () => {
           )
         })}
       </GoogleMapReact>
+      <Messenger />
       {cardChoosenOption && cardChoosenOption.socketId && (
         <UserInfoCard
           socketId={cardChoosenOption.socketId}

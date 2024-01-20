@@ -14,7 +14,7 @@ export const messengerSlice = createSlice({
   name: 'messenger',
   initialState,
   reducers: {
-    addChatboxes: (state, action) => {
+    addChatbox: (state, action) => {
       if (
         !state.chatboxes.find(
           (chatbox) => chatbox.socketId === action.payload.socketId,
@@ -31,6 +31,6 @@ export const messengerSlice = createSlice({
   },
 })
 
-const { addChatboxes, removeChatbox } = messengerSlice.actions
+export const { addChatbox, removeChatbox } = messengerSlice.actions
 
 export default messengerSlice.reducer

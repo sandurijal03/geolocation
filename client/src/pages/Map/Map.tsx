@@ -12,7 +12,7 @@ const Map = () => {
   const myLocation = useSelector((state: any) => state.map.myLocation)
   const onlineUsers = useSelector((state: any) => state.map.onlineUsers)
   const cardChoosenOption = useSelector(
-    (state: any) => state.map.cardChoosenOption,
+    (state: any) => state.map.cardChosenOption,
   )
 
   const defaultMapProps = {

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import CloseImg from './close-img.svg'
 
 type ChatboxProps = {
-  socketId: number
+  socketId: string
   username: string
 }
 

@@ -1,5 +1,8 @@
 import * as React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+
+import {removeChatbox} from '../../../../store/messenger/messengerSlice'
 
 import CloseImg from './close-img.svg'
 
@@ -49,6 +52,8 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
 const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
   const [message, setMessage] = React.useState<string>('')
 
+  const dispatch= useDispatch()
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter' && message.length > 0) {
       proceedChatMessage()
@@ -65,12 +70,16 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
     { id: 2, myMessage: false, content: 'hello back' },
   ]
 
+  const handleCloseChatbox = () => {
+    dispatch(removeChatbox(socketId))
+  }
+
   return (
     <ChatboxContainer>
       <ChatboxHeaderContainer>
         <Header>{username}</Header>
-        <CloseIconContainer>
-          <CloseImage src={CloseImg} />
+        <CloseIconContainer >
+          <CloseImage src={CloseImg} onClick={handleCloseChatbox}/>
         </CloseIconContainer>
       </ChatboxHeaderContainer>
       <ChatboxMessagesContainer>

@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { sendChatMessage } from '../../../../store/actions/messengerAction'
 
-import {removeChatbox} from '../../../../store/messenger/messengerSlice'
+import { removeChatbox } from '../../../../store/messenger/messengerSlice'
 
 import CloseImg from './close-img.svg'
 
@@ -51,8 +52,15 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
 
 const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
   const [message, setMessage] = React.useState<string>('')
+  const [inputDisabled, setInputDisabled] = React.useState(false)
 
-  const dispatch= useDispatch()
+  const messages = useSelector(
+    (state: any) => state.messenger.chatHistory[socketId],
+  )
+
+  const onlineUsers = useSelector((state: any) => state.map.onlineUsers)
+
+  const dispatch = useDispatch()
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter' && message.length > 0) {
@@ -63,12 +71,13 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
 
   const proceedChatMessage = () => {
     console.log('sending message to the receiver')
+    if (onlineUsers.find((user) => user.id === socketId)) {
+      sendChatMessage(socketId, message)
+    } else {
+      setInputDisabled(true)
+      
+    }
   }
-
-  const messages = [
-    { id: 1, myMessage: true, content: 'hello' },
-    { id: 2, myMessage: false, content: 'hello back' },
-  ]
 
   const handleCloseChatbox = () => {
     dispatch(removeChatbox(socketId))
@@ -78,12 +87,12 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
     <ChatboxContainer>
       <ChatboxHeaderContainer>
         <Header>{username}</Header>
-        <CloseIconContainer >
-          <CloseImage src={CloseImg} onClick={handleCloseChatbox}/>
+        <CloseIconContainer>
+          <CloseImage src={CloseImg} onClick={handleCloseChatbox} />
         </CloseIconContainer>
       </ChatboxHeaderContainer>
       <ChatboxMessagesContainer>
-        {messages?.map((message) => {
+        {messages?.map((message: any) => {
           return (
             <SingleMessage
               key={message.id}
@@ -100,6 +109,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
           onChange={(e) => setMessage(e.target.value)}
           value={message}
           onKeyDown={handleKeyDown}
+          disabled={inputDisabled}
         />
       </ChatboxNewMessageContainer>
     </ChatboxContainer>

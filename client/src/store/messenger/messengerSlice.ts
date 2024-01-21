@@ -28,9 +28,27 @@ export const messengerSlice = createSlice({
         (chatbox) => chatbox.socketId !== action.payload,
       )
     },
+    addChatMessage: (state, action) => {
+      if (state.chatHistory[action.payload.socketId]) {
+        // if already exists object with messages with that user - append the message
+        state.chatHistory[action.payload.socketId].push({
+          content: action.payload.content,
+          myMessage: action.payload.myMessage,
+          id: action.payload.id,
+        })
+      } else {
+        state.chatHistory[action.payload.socketId] = [
+          {
+            content: action.payload.content,
+            myMessage: action.payload.myMessage,
+            id: action.payload.id,
+          },
+        ]
+      }
+    },
   },
 })
 
-export const { addChatbox, removeChatbox } = messengerSlice.actions
+export const { addChatbox, removeChatbox ,addChatMessage} = messengerSlice.actions
 
 export default messengerSlice.reducer

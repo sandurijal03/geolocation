@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
 
 import { LoginParameters } from '../store/actions/loginActions'
+import { chatMessageHandler } from '../store/actions/messengerAction'
 import {
   onlineUsersHandler,
   userDisconnectedHandler,
@@ -16,12 +17,11 @@ export const connectWithSocketIOServer = () => {
   })
 
   socket.on('online-users', (usersData: any) => {
-    console.log(usersData)
     onlineUsersHandler(socket.id, usersData)
   })
 
   socket.on('chat-message', (data: any) => {
-    console.log('message received client', data);
+    chatMessageHandler(data)
   })
 
   socket.on('user-disconnected', (disconnectedId: string) => {

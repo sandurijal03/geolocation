@@ -110,8 +110,6 @@ const convertOnlineUsersToArray = () => {
 const chatMessageHandler = (socket: any, data: any) => {
   const { receiverSocketId, content, id } = data
   if (onlineUsers[receiverSocketId]) {
-    console.log('message received', data);
-    console.log('sending message to other user');
     io.to(receiverSocketId).emit('chat-message', {
       senderSocketId: socket.id,
       content,

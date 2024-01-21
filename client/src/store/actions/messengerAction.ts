@@ -24,3 +24,14 @@ export const sendChatMessage = (receiverSocketId: string, content: string) => {
     }),
   )
 }
+
+export const chatMessageHandler = (messageData: any) => {
+  store.dispatch(
+    addChatMessage({
+      socketId: messageData.senderSocketId,
+      content: messageData.content,
+      myMessage: false,
+      id: messageData.id,
+    }),
+  )
+}

@@ -4,19 +4,6 @@ import styled from 'styled-components'
 
 import Chatbox from './Chatbox/Chatbox'
 
-// const DUMMY_CHATBOXES = [
-//   {
-//     username: 'Martin',
-//     socketId: 3213213,
-//     messages: [],
-//   },
-//   {
-//     username: 'Test',
-//     socketId: 3213213,
-//     messages: [],
-//   },
-// ]
-
 type ChatboxType = {
   socketId:string;
   username:string

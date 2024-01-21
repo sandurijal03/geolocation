@@ -71,11 +71,10 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
 
   const proceedChatMessage = () => {
     console.log('sending message to the receiver')
-    if (onlineUsers.find((user) => user.id === socketId)) {
+    if (onlineUsers.find((user:any) => user.socketId === socketId)) {
       sendChatMessage(socketId, message)
     } else {
       setInputDisabled(true)
-      
     }
   }
 

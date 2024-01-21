@@ -26,6 +26,7 @@ const mountServer = () => {
     io.on('connection', (socket) => {
         console.log('user connected of the id: ' + socket.id);
         socket.on('user-login', (data) => loginEventHandler(socket, data));
+        socket.on('chat-message', (data) => chatMessageHandler(socket, data));
         socket.on('disconnect', () => {
             disconnectEventHandler(socket.id);
         });
@@ -49,7 +50,6 @@ const loginEventHandler = (socket, data) => {
         username: data.username,
         coords: data.coords,
     };
-    console.log('users', onlineUsers);
     io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
 };
 const convertOnlineUsersToArray = () => {
@@ -63,10 +63,21 @@ const convertOnlineUsersToArray = () => {
     });
     return onlineUsersArray;
 };
+const chatMessageHandler = (socket, data) => {
+    const { receiverSocketId, content, id } = data;
+    if (onlineUsers[receiverSocketId]) {
+        console.log('message received', data);
+        console.log('sending message to other user');
+        io.to(receiverSocketId).emit('chat-message', {
+            senderSocketId: socket.id,
+            content,
+            id,
+        });
+    }
+};
 const removeOnlineUser = (socketId) => {
     if (onlineUsers[socketId]) {
         delete onlineUsers[socketId];
     }
-    console.log('onlineUsers', onlineUsers);
 };
 mountServer();

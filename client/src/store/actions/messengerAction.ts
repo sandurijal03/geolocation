@@ -2,6 +2,8 @@ import { v4 } from 'uuid'
 import { addChatMessage } from '../messenger/messengerSlice'
 import store from '../store'
 
+import * as socketConn from '../../socketConnection/socketConn'
+
 export const sendChatMessage = (receiverSocketId: string, content: string) => {
   const message = {
     content,
@@ -10,6 +12,9 @@ export const sendChatMessage = (receiverSocketId: string, content: string) => {
   }
 
   // socketConnection - to send the message to other user
+
+  socketConn.sendChatMessage(message)
+
   store.dispatch(
     addChatMessage({
       socketId: receiverSocketId,

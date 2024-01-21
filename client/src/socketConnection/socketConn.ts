@@ -20,6 +20,10 @@ export const connectWithSocketIOServer = () => {
     onlineUsersHandler(socket.id, usersData)
   })
 
+  socket.on('chat-message', (data: any) => {
+    console.log('message received client', data);
+  })
+
   socket.on('user-disconnected', (disconnectedId: string) => {
     userDisconnectedHandler(disconnectedId)
   })
@@ -27,4 +31,8 @@ export const connectWithSocketIOServer = () => {
 
 export const login = (data: LoginParameters) => {
   socket.emit('user-login', data)
+}
+
+export const sendChatMessage = (data: any) => {
+  socket.emit('chat-message', data)
 }

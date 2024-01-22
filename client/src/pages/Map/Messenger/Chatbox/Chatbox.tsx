@@ -53,10 +53,17 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
 const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
   const [message, setMessage] = React.useState<string>('')
   const [inputDisabled, setInputDisabled] = React.useState(false)
+  const scrollRef: any = React.useRef()
+
+  const scrollToBottom = () => {
+    scrollRef.current.scrollIntoView({ behaviour: 'smooth' })
+  }
 
   const messages = useSelector(
     (state: any) => state.messenger.chatHistory[socketId],
   )
+
+  React.useEffect(scrollToBottom, [messages])
 
   const onlineUsers = useSelector((state: any) => state.map.onlineUsers)
 
@@ -71,7 +78,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
 
   const proceedChatMessage = () => {
     console.log('sending message to the receiver')
-    if (onlineUsers.find((user:any) => user.socketId === socketId)) {
+    if (onlineUsers.find((user: any) => user.socketId === socketId)) {
       sendChatMessage(socketId, message)
     } else {
       setInputDisabled(true)
@@ -100,6 +107,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ socketId, username }) => {
             />
           )
         })}
+        <div ref={scrollRef} />
       </ChatboxMessagesContainer>
       <ChatboxNewMessageContainer>
         <NewMessageInput

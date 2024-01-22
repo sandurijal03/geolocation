@@ -41,5 +41,6 @@ const deg2rad = (deg: number) => {
 }
 
 const roundToTwoDecimals = (num: number) => {
-  return +(Math.round(num + parseFloat('e+2')) + 'e-2')
+  let nums = +num.toFixed(2)
+  return Math.round(nums)
 }

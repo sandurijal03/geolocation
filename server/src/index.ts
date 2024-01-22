@@ -40,7 +40,7 @@ const mountServer = () => {
 
     socket.on('user-login', (data: UserData) => loginEventHandler(socket, data))
 
-    socket.on('chat-message', (data) => chatMessageHandler(socket, data))
+    socket.on('chat-message', (data: any) => chatMessageHandler(socket, data))
 
     socket.on('disconnect', () => {
       disconnectEventHandler(socket.id)

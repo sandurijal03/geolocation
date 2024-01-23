@@ -74,20 +74,32 @@ const DUMMY_ROOMS = [
   },
 ]
 
+const convertRoomsToArray = (videoRooms: any) => {
+  const rooms: any = []
+
+  Object.entries(videoRooms).forEach(([key, value]) => {
+    rooms.push({
+      id: key,
+      creatorUsername: value.participants[0].username,
+      amount: value.participants.length,
+    })
+  })
+  return rooms
+}
+
 const RoomsList = () => {
   const rooms = useSelector((state: any) => state.videoRoom.rooms)
 
-  console.log('rooms client', rooms);
-
+  console.log('rooms client', rooms)
 
   return (
     <div>
-      {DUMMY_ROOMS.map((room) => (
+      {convertRoomsToArray(rooms).map((room: any) => (
         <RoomJoinButton
           key={room.id}
-          creatorUsername={room.participants[0].username}
+          creatorUsername={room.creatorUsername}
           roomId={room.id}
-          amountOfParticipants={room.participants.length}
+          amountOfParticipants={room.amountOfParticipants}
         />
       ))}
 

@@ -3,9 +3,13 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import CallIcon from './call-icon.svg'
+import { createVideoRoom } from '../../store/actions/videoRoomsAction'
 
 const CreateRoomButton = () => {
-  return <CallImg src={CallIcon} alt='call icon' onClick={() => {}} />
+  const handleRoomCreate = () => {
+    createVideoRoom()
+  }
+  return <CallImg src={CallIcon} alt='call icon' onClick={handleRoomCreate} />
 }
 
 const CallImg = styled.img`

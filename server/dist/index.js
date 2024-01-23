@@ -27,6 +27,7 @@ const mountServer = () => {
         console.log('user connected of the id: ' + socket.id);
         socket.on('user-login', (data) => loginEventHandler(socket, data));
         socket.on('chat-message', (data) => chatMessageHandler(socket, data));
+        socket.on('video-room-create', (data) => videoRoomCreateHandler(socket, data));
         socket.on('disconnect', () => {
             disconnectEventHandler(socket.id);
         });
@@ -72,6 +73,9 @@ const chatMessageHandler = (socket, data) => {
             id,
         });
     }
+};
+const videoRoomCreateHandler = (socketId, data) => {
+    console.log('new room', data);
 };
 const removeOnlineUser = (socketId) => {
     if (onlineUsers[socketId]) {

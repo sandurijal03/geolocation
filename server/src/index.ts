@@ -37,7 +37,6 @@ const mountServer = () => {
   })
 
   io.on('connection', (socket: any) => {
-    console.log('user connected of the id: ' + socket.id)
 
     socket.on('user-login', (data: UserData) => loginEventHandler(socket, data))
 

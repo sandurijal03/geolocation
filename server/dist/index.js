@@ -25,7 +25,6 @@ const mountServer = () => {
         },
     });
     io.on('connection', (socket) => {
-        console.log('user connected of the id: ' + socket.id);
         socket.on('user-login', (data) => loginEventHandler(socket, data));
         socket.on('chat-message', (data) => chatMessageHandler(socket, data));
         socket.on('video-room-create', (data) => videoRoomCreateHandler(socket, data));

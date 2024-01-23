@@ -24,6 +24,10 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(data)
   })
 
+  socket.on('video-rooms', (data: any) => {
+    console.log('new video rooms received', data)
+  })
+
   socket.on('user-disconnected', (disconnectedId: string) => {
     userDisconnectedHandler(disconnectedId)
   })

@@ -15,6 +15,7 @@ type OnlineUsers = {
 }
 
 let onlineUsers: OnlineUsers = {}
+let videoRooms: any = {}
 
 var io: any
 
@@ -42,7 +43,9 @@ const mountServer = () => {
 
     socket.on('chat-message', (data: any) => chatMessageHandler(socket, data))
 
-    socket.on('video-room-create', (data: any) => videoRoomCreateHandler(socket,data))
+    socket.on('video-room-create', (data: any) =>
+      videoRoomCreateHandler(socket, data),
+    )
 
     socket.on('disconnect', () => {
       disconnectEventHandler(socket.id)
@@ -55,14 +58,9 @@ const mountServer = () => {
   })
 }
 
-const broadcastDisconnectedUserDetails = (
-  disconnectedUsersSocketId: string,
-) => {
-  io.to('logged-users').emit('user-disconnected', disconnectedUsersSocketId)
-}
+mountServer()
 
 const disconnectEventHandler = (id: string) => {
-  console.log(`user disconnected of the id : ${id}`)
   removeOnlineUser(id)
   broadcastDisconnectedUserDetails(id)
 }
@@ -86,6 +84,34 @@ const loginEventHandler = (socket: Socket, data: UserData) => {
   io.to('logged-users').emit('online-users', convertOnlineUsersToArray())
 }
 
+const chatMessageHandler = (socket: any, data: any) => {
+  const { receiverSocketId, content, id } = data
+  if (onlineUsers[receiverSocketId]) {
+    io.to(receiverSocketId).emit('chat-message', {
+      senderSocketId: socket.id,
+      content,
+      id,
+    })
+  }
+}
+
+const videoRoomCreateHandler = (socket: Socket, data: any) => {
+  const { peerId, newRoomId } = data
+  videoRooms[newRoomId] = {
+    participants: [
+      {
+        socketId: socket.id,
+        username: onlineUsers[socket.id].username,
+        peerId,
+      },
+    ],
+  }
+
+  broadcastVideoRooms()
+}
+
+// helpers
+
 type OnlineUsersCol = {
   socketId: string
   username: string
@@ -93,6 +119,22 @@ type OnlineUsersCol = {
     lat: number
     lng: number
   }
+}
+
+const removeOnlineUser = (socketId: string) => {
+  if (onlineUsers[socketId]) {
+    delete onlineUsers[socketId]
+  }
+}
+
+const broadcastDisconnectedUserDetails = (
+  disconnectedUsersSocketId: string,
+) => {
+  io.to('logged-users').emit('user-disconnected', disconnectedUsersSocketId)
+}
+
+const broadcastVideoRooms = () => {
+  io.emit('video-rooms', videoRooms)
 }
 
 const convertOnlineUsersToArray = () => {
@@ -108,26 +150,3 @@ const convertOnlineUsersToArray = () => {
 
   return onlineUsersArray
 }
-
-const chatMessageHandler = (socket: any, data: any) => {
-  const { receiverSocketId, content, id } = data
-  if (onlineUsers[receiverSocketId]) {
-    io.to(receiverSocketId).emit('chat-message', {
-      senderSocketId: socket.id,
-      content,
-      id,
-    })
-  }
-}
-
-const videoRoomCreateHandler = (socketId: string, data: any) => {
-  console.log('new room', data)
-}
-
-const removeOnlineUser = (socketId: string) => {
-  if (onlineUsers[socketId]) {
-    delete onlineUsers[socketId]
-  }
-}
-
-mountServer()

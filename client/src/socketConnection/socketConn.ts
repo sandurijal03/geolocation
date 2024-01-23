@@ -6,6 +6,7 @@ import {
   onlineUsersHandler,
   userDisconnectedHandler,
 } from '../store/actions/userActions'
+import { videoRoomsListHandler } from '../store/actions/videoRoomsAction'
 
 let socket: any = null
 
@@ -26,6 +27,7 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('video-rooms', (data: any) => {
     console.log('new video rooms received', data)
+    videoRoomsListHandler(data)
   })
 
   socket.on('user-disconnected', (disconnectedId: string) => {

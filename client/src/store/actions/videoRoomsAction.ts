@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 import store from '../store'
-import { setInRoom } from '../videoroom/videoroomSlice'
+import { setInRoom, setRooms } from '../videoroom/videoroomSlice'
 
 import * as socketConn from '../../socketConnection/socketConn'
 
@@ -14,4 +14,8 @@ export const createVideoRoom = async () => {
     peerId: 1, // change later on for later peerId
     newRoomId,
   })
+}
+
+export const videoRoomsListHandler = (videoRooms) => {
+  store.dispatch(setRooms(videoRooms))
 }

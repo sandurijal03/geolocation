@@ -76,6 +76,10 @@ const DUMMY_ROOMS = [
 
 const RoomsList = () => {
   const rooms = useSelector((state: any) => state.videoRoom.rooms)
+
+  console.log('rooms client', rooms);
+
+
   return (
     <div>
       {DUMMY_ROOMS.map((room) => (

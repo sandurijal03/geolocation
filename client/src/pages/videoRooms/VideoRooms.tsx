@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import CallIcon from './call-icon.svg'
 import { createVideoRoom } from '../../store/actions/videoRoomsAction'
+import Video from './Video'
 
 const CreateRoomButton = () => {
   const handleRoomCreate = () => {
@@ -90,8 +91,6 @@ const convertRoomsToArray = (videoRooms: any) => {
 const RoomsList = () => {
   const rooms = useSelector((state: any) => state.videoRoom.rooms)
 
-  console.log('rooms client', rooms)
-
   return (
     <div>
       {convertRoomsToArray(rooms).map((room: any) => (
@@ -108,10 +107,32 @@ const RoomsList = () => {
   )
 }
 
+const ParticipantsVideos = () => {
+  const inRoom = useSelector((state) => state.videoRoom.inRoom)
+  const localStream = useSelector((state) => state.videoRoom.localStream)
+
+  return (
+    <ParticipantsVideosContainer>
+      {inRoom && localStream && <Video stream={localStream} muted />}
+    </ParticipantsVideosContainer>
+  )
+}
+
+const ParticipantsVideosContainer = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column-reverse;
+  right: 10px;
+  bottom: 150px;
+  width: 250px;
+  align-items: flex-end;
+`
+
 const VideoRooms = () => {
   return (
     <Container>
       <RoomsList />
+      <ParticipantsVideos />
     </Container>
   )
 }

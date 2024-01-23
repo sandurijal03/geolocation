@@ -45,7 +45,6 @@ const Login = () => {
   }
 
   const onSuccess = (position: any) => {
-    console.log(position)
     dispatch(
       setMyLocation({
         lat: position.coords.latitude,
@@ -55,7 +54,6 @@ const Login = () => {
   }
 
   const onError = (error: any) => {
-    console.error('Error occured when trying to fetch location', error)
     setLocationErrorOccurred(true)
   }
 

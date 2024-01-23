@@ -3,19 +3,25 @@ import store from '../store'
 import { setInRoom, setRooms } from '../videoroom/videoroomSlice'
 
 import * as socketConn from '../../socketConnection/socketConn'
+import { getAccessToLocalStream } from '../../realtimeCommunication/webRTCHandler'
 
 export const createVideoRoom = async () => {
   // get access to local stream
-  const newRoomId = v4()
 
-  store.dispatch(setInRoom(newRoomId))
+  const success = await getAccessToLocalStream()
 
-  socketConn.createVideoRoom({
-    peerId: 1, // change later on for later peerId
-    newRoomId,
-  })
+  if (success) {
+    const newRoomId = v4()
+
+    store.dispatch(setInRoom(newRoomId))
+
+    socketConn.createVideoRoom({
+      peerId: 1, // change later on for later peerId
+      newRoomId,
+    })
+  }
 }
 
-export const videoRoomsListHandler = (videoRooms) => {
+export const videoRoomsListHandler = (videoRooms: any) => {
   store.dispatch(setRooms(videoRooms))
 }

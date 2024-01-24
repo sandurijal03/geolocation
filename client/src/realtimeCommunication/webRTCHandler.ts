@@ -1,13 +1,16 @@
 import { Peer } from 'peerjs'
 
-let peer
-let peerId: string = '';
+let peer: any
+let peerId: string = ''
 
 import store from '../store/store'
-import { setLocalStream } from '../store/videoroom/videoroomSlice'
+import {
+  setLocalStream,
+  setRemoteStream,
+} from '../store/videoroom/videoroomSlice'
 
 export const getPeerId = () => {
-  return peerId.length && peerId;
+  return peerId.length && peerId
 }
 
 export const getAccessToLocalStream = async () => {
@@ -31,8 +34,30 @@ export const connectWithPeerServer = () => {
     path: '/peer',
   })
 
-  peer.on('open', (id) => {
-    console.log('peer id', id)
-    peerId = id;
+  peer.on('open', (id: string) => {
+    peerId = id
+  })
+
+  peer.on('call', async (call: any) => {
+    const localStream = store.getState().videoRoom.localStream
+
+    call.answer(localStream && localStream) // answe the call with audio video stream
+    call.on('stream', (remoteStream: any) => {
+      console.log('remote stream', remoteStream)
+      store.dispatch(setRemoteStream(remoteStream))
+    })
+  })
+}
+
+export const call = (data: any) => {
+  const { newParticipantPeerId } = data
+
+  const localStream = store.getState().videoRoom.localStream
+
+  const peerCall = peer.call(newParticipantPeerId, localStream)
+
+  peerCall.on('stream', (remoteStream: any) => {
+    console.log('remote stream came', remoteStream)
+    store.dispatch(setRemoteStream(remoteStream))
   })
 }

@@ -1,9 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
+import { useSelector } from 'react-redux'
+import { joinVideoRoom } from '../../store/actions/videoRoomsAction'
+
 type RoomJoinButtonProps = {
   creatorUsername: string
-  roomId: number | string
+  roomId: string
   amountOfParticipants: number
 }
 
@@ -12,8 +15,20 @@ const RoomJoinButton: React.FC<RoomJoinButtonProps> = ({
   roomId,
   amountOfParticipants,
 }) => {
-  const handleJoinRoom = () => {}
-  return <RoomJoinBtn>{creatorUsername[0]}</RoomJoinBtn>
+  const inRoom = useSelector((state) => state.videoRoom.inRoom)
+
+  const handleJoinRoom = () => {
+    if (inRoom) {
+      return alert('already in room')
+    }
+
+    if (amountOfParticipants > 1) {
+      return alert('room is full')
+    }
+
+    joinVideoRoom(roomId)
+  }
+  return <RoomJoinBtn onClick={handleJoinRoom}>{creatorUsername[0]}</RoomJoinBtn>
 }
 
 export default RoomJoinButton
@@ -36,6 +51,3 @@ const RoomJoinBtn = styled.button`
     background-color: #000;
   }
 `
-
-
-

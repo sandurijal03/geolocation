@@ -7,6 +7,7 @@ const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const socket_io_1 = require("socket.io");
+const peer_1 = require("peer");
 let onlineUsers = {};
 let videoRooms = {};
 var io;
@@ -32,6 +33,7 @@ const mountServer = () => {
             disconnectEventHandler(socket.id);
         });
     });
+    const peerServer = (0, peer_1.PeerServer)({ port: 9000, path: '/peer' });
     const port = process.env.PORT || 5000;
     server.listen(port, () => {
         console.log(`server running on port: ${port}`);

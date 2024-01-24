@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { connectWithPeerServer } from '../../realtimeCommunication/webRTCHandler'
 import { connectWithSocketIOServer } from '../../socketConnection/socketConn'
 import { proceedWithLogin } from '../../store/actions/loginActions'
 import { setMyLocation } from '../../store/MapPage/mapSlice'
@@ -69,6 +70,7 @@ const Login = () => {
     //   locationOptions,
     // )
     onSuccess(getFakeLocation())
+    connectWithPeerServer()
   }, [])
 
   React.useEffect(() => {

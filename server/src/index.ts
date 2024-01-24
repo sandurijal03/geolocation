@@ -3,6 +3,7 @@ import http from 'http'
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { Server, Socket } from 'socket.io'
+import { PeerServer } from 'peer'
 
 type OnlineUsers = {
   [id: string]: {
@@ -37,7 +38,6 @@ const mountServer = () => {
   })
 
   io.on('connection', (socket: any) => {
-
     socket.on('user-login', (data: UserData) => loginEventHandler(socket, data))
 
     socket.on('chat-message', (data: any) => chatMessageHandler(socket, data))
@@ -50,6 +50,8 @@ const mountServer = () => {
       disconnectEventHandler(socket.id)
     })
   })
+
+  const peerServer = PeerServer({ port: 9000, path: '/peer' })
 
   const port = process.env.PORT || 5000
   server.listen(port, () => {

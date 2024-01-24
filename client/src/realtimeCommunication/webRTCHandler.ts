@@ -1,10 +1,14 @@
 import { Peer } from 'peerjs'
 
 let peer
-let peerId
+let peerId: string = '';
 
 import store from '../store/store'
 import { setLocalStream } from '../store/videoroom/videoroomSlice'
+
+export const getPeerId = () => {
+  return peerId.length && peerId;
+}
 
 export const getAccessToLocalStream = async () => {
   const localStream = await navigator.mediaDevices.getUserMedia({
@@ -23,7 +27,7 @@ export const getAccessToLocalStream = async () => {
 export const connectWithPeerServer = () => {
   peer = new Peer('', {
     host: 'localhost',
-    port: 5000,
+    port: 9000,
     path: '/peer',
   })
 

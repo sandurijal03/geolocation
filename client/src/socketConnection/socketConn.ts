@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client'
+import { call } from '../realtimeCommunication/webRTCHandler'
 
 import { LoginParameters } from '../store/actions/loginActions'
 import { chatMessageHandler } from '../store/actions/messengerAction'
@@ -28,6 +29,10 @@ export const connectWithSocketIOServer = () => {
   socket.on('video-rooms', (data: any) => {
     console.log('new video rooms received', data)
     videoRoomsListHandler(data)
+  })
+
+  socket.on('video-room-init', (data:any) => {
+    call(data)
   })
 
   socket.on('user-disconnected', (disconnectedId: string) => {

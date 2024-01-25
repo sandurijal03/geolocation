@@ -38,3 +38,10 @@ export const joinVideoRoom = async (roomId: string) => {
 export const videoRoomsListHandler = (videoRooms: any) => {
   store.dispatch(setRooms(videoRooms))
 }
+
+export const leaveVideoRoom = (roomId:string) => {
+  // disconnect
+  socketConn.leaveVideoRoom({roomId})
+
+  store.dispatch(setInRoom(false))
+}

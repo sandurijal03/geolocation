@@ -14,7 +14,7 @@ const ParticipantsVideos = () => {
 
   return (
     <ParticipantsVideosContainer>
-      {inRoom && <VideoRoomButtons />}
+      {inRoom && <VideoRoomButtons inRoom={inRoom} />}
       {inRoom && localStream && <Video stream={localStream} muted />}
       {inRoom && remoteStream && <Video stream={remoteStream} muted />}
     </ParticipantsVideosContainer>

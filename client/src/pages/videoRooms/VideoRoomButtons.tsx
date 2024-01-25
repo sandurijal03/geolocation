@@ -1,13 +1,20 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import { leaveVideoRoom } from '../../store/actions/videoRoomsAction'
 import LeaveBtn from './call-disconnect-icon.svg'
 import CameraIcon from './camera-icon.svg'
 import CameraOffIcon from './camera-off-icon.svg'
 import MicOn from './mic-icon.svg'
 import MicOffIcon from './mic-off-icon.svg'
 
-const VideoRoomButtons = () => {
-  const handleLeaveRoom = () => {}
+type VideoRoomButtonsProps = {
+  inRoom: string
+}
+
+const VideoRoomButtons: React.FC<VideoRoomButtonsProps> = ({ inRoom }) => {
+  const handleLeaveRoom = () => {
+    leaveVideoRoom(inRoom)
+  }
 
   return (
     <VideoButtonsContainer>

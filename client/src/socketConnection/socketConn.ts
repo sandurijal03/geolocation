@@ -31,7 +31,7 @@ export const connectWithSocketIOServer = () => {
     videoRoomsListHandler(data)
   })
 
-  socket.on('video-room-init', (data:any) => {
+  socket.on('video-room-init', (data: any) => {
     call(data)
   })
 
@@ -53,6 +53,10 @@ export const createVideoRoom = (data: any) => {
 }
 
 export const joinVideoRoom = (data: any) => {
-  console.log('emitting event to join the room', data);
+  console.log('emitting event to join the room', data)
   socket.emit('video-room-join', data)
+}
+
+export const leaveVideoRoom = (data: any) => {
+  socket.emit('video-room-leave', data)
 }

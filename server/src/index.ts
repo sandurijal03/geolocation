@@ -55,7 +55,7 @@ const mountServer = () => {
     })
 
     socket.on('disconnect', () => {
-      disconnectEventHandler(socket.id)
+      disconnectEventHandler(socket)
     })
   })
 
@@ -69,9 +69,10 @@ const mountServer = () => {
 
 mountServer()
 
-const disconnectEventHandler = (id: string) => {
-  removeOnlineUser(id)
-  broadcastDisconnectedUserDetails(id)
+const disconnectEventHandler = (socket: Socket) => {
+  checkIfUserIsInCall(socket)
+  removeOnlineUser(socket.id)
+  broadcastDisconnectedUserDetails(socket.id)
 }
 
 type UserData = {
@@ -147,7 +148,7 @@ const videoRoomLeaveHandler = (socket: Socket, data: any) => {
 
   if (videoRooms[roomId]) {
     videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
-      (participant: any) => participant.socketId === socket.id,
+      (participant: any) => participant.socketId !== socket.id,
     )
   }
 
@@ -179,6 +180,36 @@ const removeOnlineUser = (socketId: string) => {
   if (onlineUsers[socketId]) {
     delete onlineUsers[socketId]
   }
+}
+
+const checkIfUserIsInCall = (socket: Socket) => {
+  Object.entries(videoRooms).forEach(([key, value]) => {
+    let val: any = value
+    const participant = val.participants.find(
+      (participant: any) => participant.socketId === socket.id,
+    )
+
+    if (participant) {
+      removeUserFromTheVideoRoom(socket.id, key)
+    }
+  })
+}
+
+const removeUserFromTheVideoRoom = (socketId: string, roomId: string) => {
+  videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
+    (participant: any) => participant.socketId !== socketId,
+  )
+
+  // remove room if no participants left in the room
+  if (videoRooms[roomId].participants.length < 1) {
+    delete videoRooms[roomId]
+  } else {
+    // if still there is user in the room - inform him to clear his peer connection
+    io.to(videoRooms[roomId].participant[0].socketId).emit(
+      'video-call-disconnect',
+    )
+  }
+  broadcastVideoRooms()
 }
 
 const broadcastDisconnectedUserDetails = (

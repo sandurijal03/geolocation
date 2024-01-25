@@ -29,6 +29,12 @@ const mountServer = () => {
         socket.on('user-login', (data) => loginEventHandler(socket, data));
         socket.on('chat-message', (data) => chatMessageHandler(socket, data));
         socket.on('video-room-create', (data) => videoRoomCreateHandler(socket, data));
+        socket.on('video-room-join', (data) => {
+            videoRoomJoinHandler(socket, data);
+        });
+        socket.on('video-room-leave', (data) => {
+            videoRoomLeaveHandler(socket, data);
+        });
         socket.on('disconnect', () => {
             disconnectEventHandler(socket.id);
         });
@@ -73,6 +79,41 @@ const videoRoomCreateHandler = (socket, data) => {
             },
         ],
     };
+    broadcastVideoRooms();
+};
+const videoRoomJoinHandler = (socket, data) => {
+    const { roomId, peerId } = data;
+    if (videoRooms[roomId]) {
+        videoRooms[roomId].participants.forEach((participant) => {
+            socket.to(participant.socketId).emit('video-room-init', {
+                newParticipantPeerId: peerId,
+            });
+        });
+        videoRooms[roomId].participants = [
+            ...videoRooms[roomId].participants,
+            {
+                socketId: socket.id,
+                username: onlineUsers[socket.id].username,
+                peerId,
+            },
+        ];
+        broadcastVideoRooms();
+    }
+};
+const videoRoomLeaveHandler = (socket, data) => {
+    const { roomId } = data;
+    if (videoRooms[roomId]) {
+        videoRooms[roomId].participants = videoRooms[roomId].participants.filter((participant) => participant.socketId === socket.id);
+    }
+    if (videoRooms[roomId].participants.length > 0) {
+        // emit an event to the user which is in the room that he should also close his peer connection
+        socket
+            .to(videoRooms[roomId].participants[0].socketId)
+            .emit('video-call-disconnect');
+    }
+    if (videoRooms[roomId].participants.length < 1) {
+        delete videoRooms[roomId];
+    }
     broadcastVideoRooms();
 };
 const removeOnlineUser = (socketId) => {

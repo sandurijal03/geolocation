@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import { call } from '../realtimeCommunication/webRTCHandler'
+import { call, disconnect } from '../realtimeCommunication/webRTCHandler'
 
 import { LoginParameters } from '../store/actions/loginActions'
 import { chatMessageHandler } from '../store/actions/messengerAction'
@@ -33,6 +33,10 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('video-room-init', (data: any) => {
     call(data)
+  })
+
+  socket.on("video-call-disconnect", ()=> {
+    disconnect()
   })
 
   socket.on('user-disconnected', (disconnectedId: string) => {

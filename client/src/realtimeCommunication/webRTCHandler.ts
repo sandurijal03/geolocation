@@ -43,7 +43,6 @@ export const connectWithPeerServer = () => {
 
     call.answer(localStream && localStream) // answe the call with audio video stream
     call.on('stream', (remoteStream: any) => {
-      console.log('remote stream', remoteStream)
       store.dispatch(setRemoteStream(remoteStream))
     })
   })
@@ -57,7 +56,20 @@ export const call = (data: any) => {
   const peerCall = peer.call(newParticipantPeerId, localStream)
 
   peerCall.on('stream', (remoteStream: any) => {
-    console.log('remote stream came', remoteStream)
     store.dispatch(setRemoteStream(remoteStream))
   })
+}
+
+export const disconnect = () => {
+  // close all peer connections
+
+  for (let conn in peer.connections) {
+    peer.connections[conn].forEach((con: any) => {
+      con.peerConnection.close()
+
+      if (con.close) con.close()
+    })
+  }
+
+  store.dispatch(setRemoteStream(null))
 }

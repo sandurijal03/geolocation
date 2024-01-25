@@ -4,6 +4,7 @@ import { setInRoom, setRooms } from '../videoroom/videoroomSlice'
 
 import * as socketConn from '../../socketConnection/socketConn'
 import {
+    disconnect,
   getAccessToLocalStream,
   getPeerId,
 } from '../../realtimeCommunication/webRTCHandler'
@@ -40,7 +41,7 @@ export const videoRoomsListHandler = (videoRooms: any) => {
 }
 
 export const leaveVideoRoom = (roomId:string) => {
-  // disconnect
+  disconnect()
   socketConn.leaveVideoRoom({roomId})
 
   store.dispatch(setInRoom(false))

@@ -17,16 +17,25 @@ const VideoRoomButtons: React.FC<VideoRoomButtonsProps> = ({ inRoom }) => {
   const isMicOn = useSelector((state: any) => state.videoRoom.isMicOn)
   const isCameraOn = useSelector((state: any) => state.videoRoom.isCameraOn)
 
+  const localStream = useSelector((state: any) => state.videoRoom.localStream)
+
   const dispatch = useDispatch()
 
   const handleLeaveRoom = () => {
+    localStream.getAudioTracks()[0].enabled = false
+    localStream.getVideoTracks()[0].enabled = false
     leaveVideoRoom(inRoom)
   }
 
   const handleMuteToggle = () => {
+    localStream.getAudioTracks()[0].enabled =
+      !localStream.getAudioTracks()[0].enabled
     dispatch(setIsMicOn(!isMicOn))
   }
   const handleCameraToggle = () => {
+    localStream.getVideoTracks()[0].enabled =
+      !localStream.getVideoTracks()[0].enabled
+
     dispatch(setIsCameraOn(!isCameraOn))
   }
 
